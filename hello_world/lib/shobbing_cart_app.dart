@@ -35,7 +35,7 @@ class ShoppingScreen extends StatefulWidget {
 }
 
 class _ShoppingScreenState extends State<ShoppingScreen> {
-  List<Product> _selectedProducts = [];
+  final List<Product> _selectedProducts = [];
 
   void _addProducts(Product product) {
     setState(() {
