@@ -28,11 +28,10 @@ class ButtonScreen extends StatelessWidget {
           },
           child: Container(
             height: 60.0,
-            width: double.infinity,
-            margin: const EdgeInsets.all(20.0), //
+            width: 60.0,
             decoration: const BoxDecoration(
               color: Colors.red,
-              borderRadius: BorderRadius.all(Radius.circular(10)), //
+              shape: BoxShape.circle, //
             ),
             child: Center(
               child: Text('My Button'), //
