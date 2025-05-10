@@ -18,31 +18,11 @@ class CategoryCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(10), //
-                ),
-                child: Image(image: AssetImage(foodCategory.imageUrl)), //
-              ),
-              Positioned(
-                top: 16.0,
-                left: 16.0,
-                child: Text(
-                  'Yummy',
-                  style: textTheme.displayLarge, //
-                ), //
-              ),
-              Positioned(
-                bottom: 16.0,
-                right: 16.0,
-                child: RotatedBox(
-                  quarterTurns: 1, //
-                  child: Text('Yummy', style: textTheme.displayLarge),
-                ),
-              ),
-            ],
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(10), //
+            ),
+            child: Image(image: AssetImage(foodCategory.imageUrl)), //
           ), //
           ListTile(
             title: Text(foodCategory.name, style: textTheme.titleSmall), //
