@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yummy/components/category_card.dart';
-import 'package:yummy/models/food_category.dart';
+import '../components/components.dart';
+import '../models/models.dart';
 
 class CategorySection extends StatelessWidget {
   final List<FoodCategory> categories;
@@ -13,26 +13,26 @@ class CategorySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Categories', //
-            style: TextStyle(
-              fontSize: 25.0, //
-              fontWeight: FontWeight.bold, //
+          const Padding(
+            padding: EdgeInsets.only(left: 16.0, bottom: 8.0),
+            child: Text(
+              'Categories',
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            height: 275.0,
+            height: 275,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: categories.length,
               itemBuilder: (context, index) {
                 return SizedBox(
-                  width: 200,
-                  child: CategoryCard(
-                    foodCategory: categories[index], //
-                  ),
-                );
-              }, //
+                    width: 200,
+                    child: CategoryCard(
+                        category: categories[index]));
+              },
             ),
           ),
         ],

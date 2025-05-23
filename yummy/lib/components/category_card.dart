@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
-
-import 'package:yummy/models/food_category.dart';
+import '../models/models.dart';
 
 class CategoryCard extends StatelessWidget {
-  final FoodCategory foodCategory;
-  const CategoryCard({super.key, required this.foodCategory});
+  final FoodCategory category;
+
+  const CategoryCard({
+    super.key,
+    required this.category,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme.apply(
-      displayColor: Theme.of(context).colorScheme.onSurface, //
-    );
+    final textTheme = Theme.of(context)
+        .textTheme
+        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
+
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)), //
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(10), //
-            ),
-            child: Image(image: AssetImage(foodCategory.imageUrl)), //
-          ), //
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(8.0)),
+                child: Image.asset(category.imageUrl),
+              ),
+            ],
+          ),
           ListTile(
-            title: Text(foodCategory.name, style: textTheme.titleSmall), //
-            subtitle: Text(
-              '${foodCategory.numberOfRestaurants} places', //
-              style: textTheme.bodySmall,
-            ),
-          ), //
+              title: Text(category.name, style: textTheme.titleSmall),
+              subtitle: Text('${category.numberOfRestaurants} places',
+                  style: textTheme.bodySmall)),
         ],
       ),
     );

@@ -1,44 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'constants.dart';
+import '../components/components.dart';
+import '../models/models.dart';
+import '../screens/screens.dart';
 
-import 'package:yummy/components/color_button.dart';
-
-import 'package:yummy/components/theme_button.dart';
-import 'package:yummy/constants.dart';
-import 'package:yummy/screens/account_view.dart';
-import 'package:yummy/screens/explore_view.dart';
-import 'package:yummy/screens/order_view.dart';
-
-class HomePage extends StatefulWidget {
-  final ChangeThemeModeCallBack changeThemeModeCallBack;
-  final ChangeColorCallBack changeColorCallBack;
-  final String title;
-  final ColorSelection colorSelected;
-
-  const HomePage({
+class Home extends StatefulWidget {
+  const Home({
     super.key,
-    required this.changeThemeModeCallBack,
-    required this.changeColorCallBack,
-    required this.title,
+    required this.auth,
+    required this.cartManager,
+    required this.ordersManager,
+    required this.changeTheme,
+    required this.changeColor,
     required this.colorSelected,
+    required this.tab,
   });
 
+  final YummyAuth auth;
+  final int tab;
+  final CartManager cartManager;
+  final OrderManager ordersManager;
+  final ColorSelection colorSelected;
+  final void Function(bool useLightMode) changeTheme;
+  final void Function(int value) changeColor;
+
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _currentTap = 0;
-
-  void _changeCurrentTap(int index) {
-    setState(() {
-      _currentTap = index;
-    });
-  }
-
-  final List<NavigationDestination> _appBarDestinations = const [
+class _HomeState extends State<Home> {
+  int tab = 0;
+  List<NavigationDestination> appBarDestinations = const [
     NavigationDestination(
       icon: Icon(Icons.home_outlined),
-      label: 'Home',
+      label: 'Explore',
       selectedIcon: Icon(Icons.home),
     ),
     NavigationDestination(
@@ -53,35 +49,50 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
-  final List<Widget> _pages = [
-    ExploreView(),
-    const OrderView(),
-    const AccountView(),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: Text(
-          widget.title, //
+    final pages = [
+      ExplorePage(
+        cartManager: widget.cartManager,
+        orderManager: widget.ordersManager,
+      ),
+      MyOrdersPage(orderManager: widget.ordersManager),
+      AccountPage(
+        onLogOut: (logout) async {
+          if (context.mounted) {
+            widget.auth.signOut().then((value) => context.go('/login'));
+          }
+        },
+        user: User(
+          firstName: 'Stef',
+          lastName: 'P',
+          role: 'Flutteristas',
+          profileImageUrl: 'assets/profile_pics/person_stef.jpeg',
+          points: 100,
+          darkMode: true,
         ),
+      ),
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         actions: [
-          ThemeButton(
-            changeTheme: widget.changeThemeModeCallBack, //
-          ),
+          ThemeButton(changeThemeMode: widget.changeTheme),
           ColorButton(
-            changeColor: widget.changeColorCallBack,
-            colorSelected: widget.colorSelected, //
+            changeColor: widget.changeColor,
+            colorSelected: widget.colorSelected,
           ),
         ],
-      ), //
-      body: IndexedStack(index: _currentTap, children: _pages),
+      ),
+      body: IndexedStack(index: widget.tab, children: pages),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentTap,
-        onDestinationSelected: _changeCurrentTap,
-        destinations: _appBarDestinations, //
+        selectedIndex: widget.tab,
+        onDestinationSelected: (index) {
+          context.go('/$index');
+        },
+        destinations: appBarDestinations,
       ),
     );
   }

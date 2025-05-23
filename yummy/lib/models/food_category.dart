@@ -1,16 +1,12 @@
 class FoodCategory {
-  final String name;
-  final int numberOfRestaurants;
-  final String imageUrl;
+  String name;
+  int numberOfRestaurants;
+  String imageUrl;
 
-  const FoodCategory(
-    this.name,
-    this.numberOfRestaurants,
-    this.imageUrl, //
-  );
+  FoodCategory(this.name, this.numberOfRestaurants, this.imageUrl);
 }
 
-const List<FoodCategory> categories = [
+List<FoodCategory> categories = [
   FoodCategory('Dessert', 16, 'assets/categories/dessert.png'),
   FoodCategory('Vegetarian', 20, 'assets/categories/vegetarian.png'),
   FoodCategory('Burger', 21, 'assets/categories/burger.png'),

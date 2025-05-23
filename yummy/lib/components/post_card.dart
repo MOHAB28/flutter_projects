@@ -1,32 +1,48 @@
 import 'package:flutter/material.dart';
-
-import 'package:yummy/models/post.dart';
+import '../models/models.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
-  const PostCard({super.key, required this.post});
+
+  const PostCard({
+    super.key,
+    required this.post,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme.apply(
-      displayColor: Theme.of(context).colorScheme.onSurface, //
-    );
+    final textTheme = Theme.of(context)
+        .textTheme
+        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
+
     return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)), //
-      ),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 25.0,
-          backgroundImage: AssetImage(post.profileImageUrl),
-        ),
-        title: Text(
-          post.comment, //
-          style: textTheme.titleMedium,
-        ),
-        subtitle: Text(
-          '${post.timestamp} Minutes ago',
-          style: textTheme.bodySmall, //
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 25,
+              backgroundImage: AssetImage(post.profileImageUrl),
+            ),
+            const SizedBox(
+              width: 16.0,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(post.comment,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.titleMedium),
+                  Text('${post.timestamp} mins ago',
+                      style: textTheme.bodySmall),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
