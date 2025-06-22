@@ -19,8 +19,8 @@ class _NewsListState extends State<NewsList> {
   bool _hasFetched = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     if (!_hasFetched) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final newsNotifier = context.read<NewsNotifier>();
