@@ -1,11 +1,25 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:lafyuu/core/api/api.dart';
 
 import 'http_service_impl.dart';
 
 class AuthServiceImpl implements AuthService {
-  final _baseUrl = 'https://dummyjson.com';
+  // Create a singleton instance of AuthServiceImpl
+
+  // First create a private constructor
+  AuthServiceImpl._internal();
+
+  // Then create a static instance of the class
+  static final AuthServiceImpl _instance = AuthServiceImpl._internal();
+
+  // Use a factory constructor to return the static instance
+  // This allows you to use AuthServiceImpl() to get the same instance every time
+  factory AuthServiceImpl() {
+    return _instance;
+  }
+
   final _storage = const FlutterSecureStorage();
 
   @override
@@ -13,7 +27,7 @@ class AuthServiceImpl implements AuthService {
     required String username,
     required String password,
   }) async {
-    final url = Uri.parse('$_baseUrl/auth/login');
+    final url = Uri.parse('${Api.baseUrl}${Api.login}');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -65,7 +79,7 @@ class AuthServiceImpl implements AuthService {
 
     if (refreshToken == null) return false;
 
-    final url = Uri.parse('$_baseUrl/auth/refresh');
+    final url = Uri.parse('${Api.baseUrl}${Api.refreshToken}');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -87,7 +101,7 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<http.Response> authenticatedGet(String endpoint) async {
     String? accessToken = await getAccessToken();
-    var url = Uri.parse('$_baseUrl$endpoint');
+    var url = Uri.parse('${Api.baseUrl}$endpoint');
 
     var response = await http.get(
       url,
