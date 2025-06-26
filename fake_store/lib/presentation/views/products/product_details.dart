@@ -1,0 +1,65 @@
+import 'package:fake_store/presentation/cubits/products/single_product/single_product_cubit.dart';
+import 'package:fake_store/presentation/cubits/products/single_product/single_product_states.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class ProductDetails extends StatelessWidget {
+  const ProductDetails({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SingleProductCubit, SingleProductStates>(
+      builder: (context, state) {
+        switch (state) {
+          case SingleProductInitial():
+          case SingleProductLoading():
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          case SingleProductLoaded():
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  state.product.title ?? '',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+              body: ListView(
+                padding: const EdgeInsets.all(20.0),
+                children: [
+                  Image(
+                    image: NetworkImage(
+                      state.product.image ?? '', //
+                    ), //
+                    height: 300.0,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(height: 20.0),
+                  Text(
+                    state.product.description ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium, //
+                  ),
+                ], //
+              ),
+            );
+          case SingleProductError():
+            return Scaffold(
+              body: Center(
+                child: Text(
+                  'Error: ${state.message}',
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            );
+          default:
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(), //
+              ),
+            );
+        }
+      }, //
+    );
+  }
+}
