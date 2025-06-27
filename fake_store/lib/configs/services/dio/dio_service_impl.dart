@@ -32,4 +32,23 @@ class DioServiceImpl implements DioService {
       throw Exception('Failed to perform GET request: $e');
     }
   }
+
+  @override
+  Future<Response> post({
+    required String url,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    try {
+      return await _dio.post(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
+    } catch (e) {
+      throw Exception('Failed to perform POST request: $e');
+    }
+  }
 }

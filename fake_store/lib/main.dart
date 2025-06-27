@@ -1,12 +1,14 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fake_store/presentation/cubits/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'configs/services/dio/dio_service.dart';
 import 'configs/services/dio/dio_service_impl.dart';
+import 'data/repositories/auth/auth_repository.dart';
 import 'data/repositories/products/products_repository.dart';
+import 'presentation/cubits/observer/observer.dart';
 import 'presentation/cubits/products/all_products/products_cubit.dart';
 import 'routes/app_routes.dart';
-import 'presentation/cubits/observer/observer.dart';
 
 void main() {
   Bloc.observer = const AppBlocObserver();
@@ -14,9 +16,15 @@ void main() {
     MultiBlocProvider(
       providers: [
         RepositoryProvider<DioService>(create: (_) => DioServiceImpl()), //
+        RepositoryProvider<AuthRepository>(
+          create: (context) => AuthRepositoryImpl(
+            context.read<DioService>(), //
+          ), //
+        ),
         RepositoryProvider<ProductsRepository>(
-          create: (context) =>
-              ProductsRepositoryImpl(context.read<DioService>()),
+          create: (context) => ProductsRepositoryImpl(
+            context.read<DioService>(), //
+          ),
         ), //
       ],
       child: const MyApp(), //
@@ -29,9 +37,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ProductCubit>(
-      create: (context) =>
-          ProductCubit(context.read<ProductsRepository>())..fetchProducts(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthCubit>(
+          create: (context) => AuthCubit(
+            context.read<AuthRepository>(), //
+          )..checkIsLoggedIn(),
+        ),
+        BlocProvider<ProductCubit>(
+          lazy: true,
+          create: (context) => ProductCubit(
+            context.read<ProductsRepository>(), //
+          )..fetchProducts(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Fake Store',
         debugShowCheckedModeBanner: false,

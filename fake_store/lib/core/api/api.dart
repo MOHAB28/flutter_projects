@@ -3,4 +3,7 @@ class Api {
 
   // Products API endpoint
   static const String products = '/products';
+
+  // Auth login
+  static const String authLogin = '/auth/login';
 }

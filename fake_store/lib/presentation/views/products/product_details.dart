@@ -27,18 +27,42 @@ class ProductDetails extends StatelessWidget {
               body: ListView(
                 padding: const EdgeInsets.all(20.0),
                 children: [
-                  Image(
-                    image: NetworkImage(
-                      state.product.image ?? '', //
-                    ), //
-                    height: 300.0,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                  Stack(
+                    children: [
+                      Image(
+                        image: NetworkImage(
+                          state.product.image ?? '', //
+                        ), //
+                        height: 300.0,
+                        width: double.infinity,
+                      ),
+                      Positioned(
+                        top: 10.0,
+                        right: 10.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[350],
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.favorite_border),
+                            onPressed: () {
+                              //TODO: Handle favorite action
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
+                  Text(
+                    state.product.title ?? '',
+                    style: Theme.of(context).textTheme.titleLarge, //
                   ),
                   const SizedBox(height: 20.0),
                   Text(
                     state.product.description ?? '',
-                    style: Theme.of(context).textTheme.bodyMedium, //
+                    style: Theme.of(context).textTheme.bodyLarge, //
                   ),
                 ], //
               ),
