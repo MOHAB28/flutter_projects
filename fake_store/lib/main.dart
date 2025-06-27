@@ -7,7 +7,6 @@ import 'configs/services/dio/dio_service_impl.dart';
 import 'data/repositories/auth/auth_repository.dart';
 import 'data/repositories/products/products_repository.dart';
 import 'presentation/cubits/observer/observer.dart';
-import 'presentation/cubits/products/all_products/products_cubit.dart';
 import 'routes/app_routes.dart';
 
 void main() {
@@ -43,12 +42,6 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthCubit(
             context.read<AuthRepository>(), //
           )..checkIsLoggedIn(),
-        ),
-        BlocProvider<ProductCubit>(
-          lazy: true,
-          create: (context) => ProductCubit(
-            context.read<ProductsRepository>(), //
-          )..fetchProducts(),
         ),
       ],
       child: MaterialApp(

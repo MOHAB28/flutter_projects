@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/repositories/products/products_repository.dart';
+import '../presentation/cubits/products/all_products/products_cubit.dart';
 import '../presentation/cubits/products/single_product/single_product_cubit.dart';
 import '../presentation/views/auth/auth_view.dart';
 import '../presentation/views/products/product_details.dart';
@@ -28,8 +29,13 @@ class AppRoutes {
         );
       case AppRoutesNames.products:
         return MaterialPageRoute(
-          builder: (_) {
-            return const ProductsView();
+          builder: (context) {
+            return BlocProvider<ProductCubit>(
+              create: (context) => ProductCubit(
+                context.read<ProductsRepository>(), //
+              )..fetchProducts(),
+              child: const ProductsView(),
+            );
           }, //
         );
       case AppRoutesNames.productDetails:

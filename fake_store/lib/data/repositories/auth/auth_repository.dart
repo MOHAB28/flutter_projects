@@ -28,7 +28,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await _dioService.post(
         url: Api.authLogin,
-        data: {'email': email, 'password': password}, //
+        data: {'username': email, 'password': password}, //
       );
       if (response.statusCode == 200) {
         await _saveToken(response.data['token']);
@@ -36,7 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
         throw Exception('Login failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Login failed: $e');
+      throw Exception('Login failed: ${e.toString()}');
     }
   }
 

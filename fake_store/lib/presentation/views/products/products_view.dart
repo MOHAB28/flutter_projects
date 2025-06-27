@@ -1,6 +1,11 @@
+import 'package:fake_store/presentation/cubits/auth/auth_cubit.dart';
+import 'package:fake_store/presentation/cubits/auth/auth_states.dart';
+import 'package:fake_store/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
+import '../../../core/constants/images_manager.dart';
 import '../../cubits/products/all_products/products_cubit.dart';
 import '../../cubits/products/all_products/products_states.dart';
 import '../../widgets/product_item_builder.dart';
@@ -20,14 +25,59 @@ class ProductsView extends StatelessWidget {
           ).textTheme.headlineMedium?.copyWith(fontStyle: FontStyle.italic),
         ), //
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: IconButton(
-              icon: const Icon(
-                Icons.search, //
-                size: 30.0, //s
-              ),
-              onPressed: () {}, // TODO: Implement search functionality
+          SizedBox(
+            width: 110.0,
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.search, //
+                    size: 30.0, //s
+                  ),
+                  onPressed: () {}, // TODO: Implement search functionality
+                ),
+                BlocListener<AuthCubit, AuthStates>(
+                  listener: (context, state) {
+                    if (state is AuthLoadingState) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Center(
+                            child: Container(
+                              height: 200,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Lottie.asset(
+                                AssetsManager.loadingAnimation,
+                                repeat: true,
+                                animate: true,
+                              ),
+                            ),
+                          );
+                        }, //
+                      );
+                    } else if (state is AuthLoggedOutState) {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        AppRoutesNames.login,
+                        (route) => false,
+                      );
+                    }
+                  },
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.logout, //
+                      size: 30.0, //s
+                    ),
+                    onPressed: () {
+                      context.read<AuthCubit>().logout();
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
